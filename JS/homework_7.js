@@ -10,12 +10,10 @@
 //     Например после действия сумма в истории должна появится такая запись: "Мой калькулятор (8.11.2021 20:30): сумма = 10, (5, 5)"
 // Калькулятор должен уметь вывести историю действий в консоль и уметь очищать историю действий.
 
-let date = new Date();
-log_date = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes();
-
 
 let calculator = new Calculator('Калькулятор');
 calculator.operations.sum(2, 2, 23);
+calculator.log.push_log(name,log_date, action_name, result, sum_arrg);
 calculator.operations.sum(3, 3);
 calculator.operations.mul(2, 6);
 calculator.operations.sub(10, 4);
@@ -23,22 +21,14 @@ calculator.operations.div(10, 2);
 calculator.log.display_log();
 calculator.log.log_clear();
 
-let calculator_2 = new Calculator('Калькулятор 2');
-calculator_2.operations.sum(2, 2, 23, 302);
-calculator_2.operations.mul(2, 6, 3);
-calculator_2.operations.sub(10, 2);
-calculator_2.operations.div(10, 5);
-calculator_2.log.display_log();
-calculator_2.log.log_clear();
-
-
 function Calculator(name) {
     this.name = name;
-
     let log_list = [];
     this.log = {
+        push_log : function (name,log_date, action_name, result, ...array_arg) {
+           log_list.push(name + ' ' + log_date + ' ' + action_name + ' = ' + result + ',' + '(' + array_arg + ')');
+        },
         display_log: function () {
-            console.log(log_list);
             for (let list = 0; list <= log_list.length - 1; list++) {
                 console.log(log_list[list]);
             }
@@ -61,7 +51,9 @@ function Calculator(name) {
                     result += sum[sum_round];
                 }
             }
-            log_list.push(name + ' ' + log_date + ' ' + action_name + ' = ' + result + ',' + '(' + sum_arrg + ')');
+            let date = new Date();
+            log_date = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes();
+            calculator.log.push_log(name,log_date, action_name, result, sum_arrg);
         },
         sub: function (subtrahend, subtractor) {
             let action_name = 'Вычитание';
@@ -70,7 +62,7 @@ function Calculator(name) {
             } else {
                 result = subtrahend - subtractor;
             }
-            log_list.push(name + ' ' + log_date + ' ' + action_name + ' = ' + result + ',' + '(' + subtrahend + ',' + subtractor + ')');
+            calculator.log.push_log(name,log_date, action_name, result, subtrahend, subtractor);
         },
         mul: function (...mul_arrg) {
             let action_name = 'Умножение';
@@ -84,7 +76,9 @@ function Calculator(name) {
                     result *= mul[mul_round];
                 }
             }
-            log_list.push(name + ' ' + log_date + ' ' + action_name + ' = ' + result + ',' + '(' + mul_arrg + ')');
+            let date = new Date();
+            log_date = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes();
+            calculator.log.push_log(name,log_date, action_name, result, mul_arrg);
         },
         div: function (dividend, divider) {
             let action_name = 'Деление';
@@ -93,9 +87,9 @@ function Calculator(name) {
             } else {
                 result = dividend / divider;
             }
-            log_list.push(name + ' ' + log_date + ' ' + action_name + ' = ' + result + ',' + '(' + dividend + ',' + divider + ')');
+            let date = new Date();
+            log_date = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() ;
+            calculator.log.push_log(name,log_date, action_name, result, dividend,divider);
         }
     }
-
-
 }
